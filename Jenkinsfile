@@ -1,36 +1,28 @@
 pipeline {
-    // ¡AQUÍ ESTÁ LA MAGIA! Le decimos que obligatoriamente use tu PC
-    agent { 
-        label 'windows' 
-    }
-    
-    // Ya no necesitamos la herramienta de Linux ni el Invariant, porque tu Windows ya tiene Visual Studio nativo
-    
+    agent { label 'windows' }
+
     stages {
-        stage('Limpiar espacio') {
-            steps {
-                // Comando de Windows para limpiar carpetas viejas antes de compilar
-                bat 'dotnet clean' 
-            }
-        }
         stage('Restaurar Paquetes') {
             steps {
-                bat 'dotnet restore' 
+                // Para proyectos Web clásicos, a veces el restore se hace con nuget.exe
+                // pero probemos primero si msbuild lo puede manejar
+                bat 'msbuild excel.slnx /t:Restore /p:Configuration=Release'
             }
         }
         stage('Compilar Solución') {
             steps {
-                bat 'dotnet build --no-restore'
+                // Aquí está el cambio clave: usamos msbuild
+                bat 'msbuild excel.slnx /t:Build /p:Configuration=Release'
             }
         }
         stage('Ejecutar Pruebas') {
             steps {
-                echo 'Próximo paso: Conectar a SQL Server y MongoDB...'
+                echo 'Pruebas pendientes...'
             }
         }
         stage('Desplegar en IIS') {
             steps {
-                echo 'Próximo paso: Enviar al servidor Windows...'
+                echo 'Despliegue pendiente...'
             }
         }
     }
