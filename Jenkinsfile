@@ -44,9 +44,9 @@ pipeline {
         stage('Despliegue a IIS') {
             steps {
                 echo 'Desplegando archivos compilados en IIS...'
-                // Copia inteligente: solo mueve lo que cambió
-                bat "robocopy .\\${env.BUILD_PATH} ${env.IIS_PATH} /E /MIR /XD obj"
-                // Reinicio de IIS para aplicar cambios
+                // Intentamos copiar desde la carpeta bin general de Presentación
+                // /R:3 /W:5 son reintentos, más seguro para evitar bloqueos
+                bat "robocopy .\\Presentacion\\bin C:\\inetpub\\wwwroot\\MiMonolito /E /MIR /R:3 /W:5"
                 bat "iisreset"
             }
         }
