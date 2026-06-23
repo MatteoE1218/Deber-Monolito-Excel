@@ -4,14 +4,12 @@ pipeline {
     environment {
         MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\MSBuild.exe'
         NUGET_PATH = 'C:\\NuGet\\nuget.exe'
-        // Esta es la ruta donde se genera tu exe de pruebas
-        PRUEBAS_EXE = 'C:\\Users\\matte\\source\\repos\\excel\\PruebasConexion\\bin\\Release\\PruebasConexion.exe'
     }
 
     stages {
         stage('Preparación') {
             steps {
-                bat "\"${env.MSBUILD_PATH}\" excel.slnx /t:Clean /p:Configuration=Release"
+                bat "\"${env.MSBUILD_PATH}\" excel.slnx /t:Clean /p:Configuration=Debug"
             }
         }
         
@@ -23,21 +21,22 @@ pipeline {
         
         stage('Compilar Solución') {
             steps {
-                bat "\"${env.MSBUILD_PATH}\" excel.slnx /t:Build /p:Configuration=Release"
+                bat "\"${env.MSBUILD_PATH}\" excel.slnx /t:Build /p:Configuration=Debug"
             }
         }
         
         stage('Ejecutar Pruebas') {
             steps {
                 echo 'Verificando conectividad con BD...'
-                // Si este programa devuelve 1, el pipeline fallará aquí
-                bat "${env.PRUEBAS_EXE}"
+                // Buscamos directamente en el subdirectorio bin\Debug donde compila tu VS
+                bat ".\\PruebasConexion\\bin\\Debug\\PruebasConexion.exe"
             }
         }
         
         stage('Despliegue a IIS') {
             steps {
-                echo 'Próximo paso: Configurar despliegue automático...'
+                echo 'El pipeline de Integración Continua ha finalizado con éxito.'
+                echo 'Próximo paso: Configurar el despliegue automático hacia C:\\inetpub\\wwwroot'
             }
         }
     }

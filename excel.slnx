@@ -2,4 +2,5 @@
   <Project Path="Datos/Datos.csproj" Id="d69a7b00-18c6-4df6-9cec-d265bc748a37" />
   <Project Path="Negocio/Negocio.csproj" Id="fdb66202-d169-4743-a300-343adf655ce2" />
   <Project Path="Presentacion/Presentacion.csproj" Id="af911801-0107-463e-9eb8-f7df509dc86b" />
+  <Project Path="PruebasConexion/PruebasConexion.csproj" Id="f9918cb2-0f37-4f6c-8a4b-08d4e54629bb" />
 </Solution>
