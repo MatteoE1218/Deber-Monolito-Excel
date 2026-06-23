@@ -1,25 +1,26 @@
 pipeline {
-    agent any
+    // ¡AQUÍ ESTÁ LA MAGIA! Le decimos que obligatoriamente use tu PC
+    agent { 
+        label 'windows' 
+    }
     
-    // Aquí le decimos a Jenkins que use el motor de .NET 10
-    tools {
-        dotnetsdk 'dotnet' 
-    }
-
-    // Encendemos el interruptor para que ignore la falta de librerías de idioma en Linux
-    environment {
-        DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = '1'
-    }
-
+    // Ya no necesitamos la herramienta de Linux ni el Invariant, porque tu Windows ya tiene Visual Studio nativo
+    
     stages {
+        stage('Limpiar espacio') {
+            steps {
+                // Comando de Windows para limpiar carpetas viejas antes de compilar
+                bat 'dotnet clean' 
+            }
+        }
         stage('Restaurar Paquetes') {
             steps {
-                sh 'dotnet restore' 
+                bat 'dotnet restore' 
             }
         }
         stage('Compilar Solución') {
             steps {
-                sh 'dotnet build --no-restore'
+                bat 'dotnet build --no-restore'
             }
         }
         stage('Ejecutar Pruebas') {
