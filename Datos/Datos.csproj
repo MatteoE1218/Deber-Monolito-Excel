@@ -168,11 +168,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="InventarioDB.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="InventarioDB.mdf" />
     <Content Include="InventarioDB_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>InventarioDB.mdf</DependentUpon>
     </Content>
   </ItemGroup>
