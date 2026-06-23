@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="InventarioDB" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\InventarioDB.mdf;Integrated Security=True" SettingsObjectName="Datos.Properties.Settings" SettingsPropertyName="InventarioDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.tbl_cache_proveedor" Member="tbl_cache_proveedor">
+    <Type Name="tbl_cache_proveedor">
+      <Column Name="id_cache" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="id_prov_eliminado" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="fecha_eliminacion" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_imagen_producto" Member="tbl_imagen_producto">
+    <Type Name="tbl_imagen_producto">
+      <Column Name="id_img" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="id_pro" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ruta_img" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="tbl_producto_tbl_imagen_producto" Member="tbl_producto" ThisKey="id_pro" OtherKey="id_pro" Type="tbl_producto" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_producto" Member="tbl_producto">
+    <Type Name="tbl_producto">
+      <Column Name="id_pro" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="id_prov" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="nombre_pro" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="categoria_pro" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="precio_pro" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ruta_imagen_pro" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="tbl_producto_tbl_imagen_producto" Member="tbl_imagen_producto" ThisKey="id_pro" OtherKey="id_pro" Type="tbl_imagen_producto" />
+      <Association Name="tbl_proveedor_tbl_producto" Member="tbl_proveedor" ThisKey="id_prov" OtherKey="id_prov" Type="tbl_proveedor" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_proveedor" Member="tbl_proveedor">
+    <Type Name="tbl_proveedor">
+      <Column Name="id_prov" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nombre_prov" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ruc_prov" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Association Name="tbl_proveedor_tbl_producto" Member="tbl_producto" ThisKey="id_prov" OtherKey="id_prov" Type="tbl_producto" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_usuario" Member="tbl_usuario">
+    <Type Name="tbl_usuario">
+      <Column Name="id_usuario" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="correo_usu" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="clave_usu" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>
