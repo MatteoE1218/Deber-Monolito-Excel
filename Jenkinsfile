@@ -1,15 +1,19 @@
 pipeline {
     agent any
     
-    // Aquí le decimos a Jenkins que use el motor de .NET que acabamos de configurar
+    // Aquí le decimos a Jenkins que use el motor de .NET 10
     tools {
         dotnetsdk 'dotnet' 
+    }
+
+    // Encendemos el interruptor para que ignore la falta de librerías de idioma en Linux
+    environment {
+        DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = '1'
     }
 
     stages {
         stage('Restaurar Paquetes') {
             steps {
-                // Usamos 'sh' en lugar de 'cmd' porque Jenkins está en Linux
                 sh 'dotnet restore' 
             }
         }
@@ -20,7 +24,6 @@ pipeline {
         }
         stage('Ejecutar Pruebas') {
             steps {
-                // Dejaremos esto simulado un momento más hasta comprobar que compile bien
                 echo 'Próximo paso: Conectar a SQL Server y MongoDB...'
             }
         }
