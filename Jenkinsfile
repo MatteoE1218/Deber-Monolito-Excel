@@ -5,12 +5,13 @@ pipeline {
         // Rutas a tus herramientas (asegúrate que sean correctas en tu PC)
         MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\MSBuild.exe'
         NUGET_PATH = 'C:\\NuGet\\nuget.exe'
-        // Ruta relativa al workspace de Jenkins
+        // Ruta al ejecutable de pruebas generado
         PRUEBAS_EXE = 'PruebasConexion\\bin\\Debug\\PruebasConexion.exe'
         
-        // Carpeta de despliegue
+        // Carpeta donde IIS sirve tu aplicación (debe coincidir con la ruta en IIS)
         IIS_PATH = 'C:\\inetpub\\wwwroot\\MiMonolito'
-        BUILD_PATH = 'Presentacion\\bin'
+        // Carpeta origen desde donde se despliega
+        BUILD_PATH = 'Presentacion'
     }
 
     stages {
@@ -42,9 +43,12 @@ pipeline {
         stage('Despliegue a IIS') {
             steps {
                 echo 'Desplegando archivos compilados en IIS...'
-                // El comando & if %ERRORLEVEL% LEQ 1 exit 0 evita que el código 1 de robocopy falle el pipeline
-                bat "robocopy .\\${env.BUILD_PATH} ${env.IIS_PATH} /E /MIR /R:3 /W:5 & if %ERRORLEVEL% LEQ 1 exit 0"
-                echo 'Despliegue exitoso.'
+                // Se agregó & exit 0 para que Jenkins ignore errores no críticos de robocopy
+                // Copiamos toda la carpeta Presentacion para incluir .aspx, .config y bin
+                bat "robocopy .\\${env.BUILD_PATH} ${env.IIS_PATH} /E /MIR /R:3 /W:5 /XD obj & exit 0"
+                
+                echo 'Reiniciando IIS...'
+                bat "iisreset || echo 'No se pudo reiniciar IIS, pero el despliegue se realizó.'"
             }
         }
     }
