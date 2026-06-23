@@ -2,37 +2,35 @@ pipeline {
     agent { label 'windows' }
 
     environment {
-        // Esta es la ruta exacta que obtuviste en tu consola
+        // Ajusta esta ruta a donde instalaste tu MSBuild
         MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\MSBuild.exe'
+        // Ajusta esta ruta a donde descargaste nuget.exe
+        NUGET_PATH = 'C:\\NuGet\\nuget.exe'
     }
 
     stages {
-        stage('Limpiar Espacio') {
+        stage('Limpiar y Restaurar Paquetes') {
             steps {
-                // Limpiamos compilaciones previas usando la ruta de MSBuild
+                // Primero: Limpiamos
                 bat "\"${env.MSBUILD_PATH}\" excel.slnx /t:Clean /p:Configuration=Release"
-            }
-        }
-        stage('Restaurar Paquetes') {
-            steps {
-                // Restauramos los paquetes NuGet del proyecto
-                bat "\"${env.MSBUILD_PATH}\" excel.slnx /t:Restore /p:Configuration=Release"
+                // Segundo: Restauramos paquetes usando NuGet directamente (más confiable)
+                bat "\"${env.NUGET_PATH}\" restore excel.slnx"
             }
         }
         stage('Compilar Solución') {
             steps {
-                // Compilamos todo el monolito
+                // Tercero: Compilamos usando MSBuild
                 bat "\"${env.MSBUILD_PATH}\" excel.slnx /t:Build /p:Configuration=Release"
             }
         }
         stage('Ejecutar Pruebas') {
             steps {
-                echo 'Próximo paso: Configurar pruebas automatizadas...'
+                echo 'Pruebas pendientes...'
             }
         }
         stage('Desplegar en IIS') {
             steps {
-                echo 'Próximo paso: Desplegar archivos en IIS...'
+                echo 'Despliegue pendiente...'
             }
         }
     }
